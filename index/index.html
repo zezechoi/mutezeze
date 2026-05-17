@@ -40,7 +40,7 @@
     <div class="flex items-center justify-end text-xs meta text-ink-500">
       <span class="inline-flex items-center gap-2">
         <span class="w-1.5 h-1.5 rounded-full bg-mustard animate-pulse"></span>
-        Live · Day 1
+        Live · Day <span data-live-day>1</span>
       </span>
     </div>
   </div>
@@ -192,5 +192,17 @@
     })();
   </script>
 
+  <script>
+    // Auto-update "Day N" label based on launch date.
+    (function () {
+      var start = new Date('2026-05-16T00:00:00');
+      var now   = new Date();
+      start.setHours(0,0,0,0); now.setHours(0,0,0,0);
+      var day = Math.max(1, Math.floor((now - start) / 86400000) + 1);
+      document.querySelectorAll('[data-live-day]').forEach(function (el) {
+        el.textContent = day;
+      });
+    })();
+  </script>
 </body>
 </html>
