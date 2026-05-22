@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mutezeze OS — Home</title>
+  <title>Mutezeze OS — Insight Gallery</title>
   <link rel="stylesheet" as="style" crossorigin
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,177 +13,128 @@
         extend: {
           fontFamily: { sans: ['Pretendard Variable','Pretendard','system-ui','sans-serif'] },
           colors: {
-            cream:'#F4EFE6', creamBorder:'#E2D7BF', creamMuted:'#EDE6D6',
-            rose:'#C76784', dustyRose:'#9F6463', wine:'#B5454C', coral:'#D77C56',
-            mustard:'#D6A53D', sand:'#C9AC6F', taupe:'#897866', camel:'#9C7B57',
-            olive:'#8C8754', moss:'#587749', forest:'#4F5E4D', teal:'#6E9696',
-            slate:'#5E7691', petrol:'#3F6F86', plum:'#946683', purple:'#715378',
-            ink:{900:'#111111',700:'#3a3a3a',500:'#6b6b6b',300:'#bdbdbd'},
-            paper:{50:'#fafafa',100:'#f3f3f3',200:'#e8e8e8'}
+            bg:'#0E0C0A', bg2:'#161310', bg3:'#1E1A16', line:'#2A2420',
+            ink:{0:'#F0EAE0', 1:'#C9BEAE', 2:'#8A7C6B', 3:'#6B5E50'},
+            accent:'#C4753A', gold:'#D4A853'
           }
         }
       }
     };
   </script>
   <style>
+    html, body { background:#0E0C0A; }
     body { font-feature-settings:'ss01','ss02'; }
     .meta { font-variant-numeric: tabular-nums; letter-spacing:.02em; }
-    .dot { display:inline-block; width:8px; height:8px; border-radius:9999px; vertical-align:middle; }
-    .card { background:#fff; border:1px solid #E2D7BF; border-radius:10px; padding:24px; box-shadow:0 1px 0 rgba(120,95,50,.04); }
-    .label { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#6b6b6b; font-weight:500; }
-    .status-chip { display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:9999px; font-size:11px; font-weight:500; background:#FAF6ED; border:1px solid #E2D7BF; color:#897866; }
-    .status-chip .pulse { width:6px; height:6px; border-radius:9999px; background:#D6A53D; animation:pulse 1.8s ease-in-out infinite; }
-    @keyframes pulse { 0%,100% {opacity:.3} 50% {opacity:1} }
+    .label { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8A7C6B; font-weight:500; }
+
+    /* uniform grid */
+    .grid-gallery {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap:8px;
+    }
+    @media (max-width:640px){ .grid-gallery { grid-template-columns: repeat(2, 1fr); } }
+    .cell {
+      position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:8px;
+      background:#161310; border:1px solid #2A2420; cursor:zoom-in;
+      transition: transform .16s ease, border-color .16s ease;
+    }
+    .cell img { width:100%; height:100%; object-fit:cover; display:block; transition: transform .3s ease; }
+    .cell:hover { border-color:#C4753A; transform: translateY(-2px); }
+    .cell:hover img { transform: scale(1.05); }
+    .cell .cap {
+      position:absolute; inset:auto 0 0 0; padding:16px 10px 8px;
+      font-size:11px; color:#F0EAE0; opacity:0; transition:opacity .16s ease;
+      background:linear-gradient(to top, rgba(14,12,10,.9), rgba(14,12,10,0));
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .cell:hover .cap { opacity:1; }
+
+    /* lightbox */
+    #lightbox { background:rgba(8,7,6,.94); backdrop-filter: blur(4px); }
+    #lightbox img { max-width:92vw; max-height:82vh; object-fit:contain; border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+    .lb-btn { position:fixed; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:9999px;
+      background:rgba(30,26,22,.7); border:1px solid #2A2420; color:#F0EAE0; font-size:20px; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .lb-btn:hover { background:#C4753A; }
+
+    .skeleton { aspect-ratio:1/1; background:#1E1A16; border-radius:8px; animation:pulse 1.6s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
   </style>
 </head>
-<body class="bg-cream text-ink-900 font-sans antialiased">
+<body class="text-ink-0 font-sans antialiased">
 
-  <div class="max-w-3xl mx-auto px-6 pt-8">
-    <div class="flex items-center justify-end text-xs meta text-ink-500">
-      <span class="inline-flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-mustard animate-pulse"></span>
+  <!-- Top bar -->
+  <div class="max-w-7xl mx-auto px-6 pt-8">
+    <div class="flex items-center justify-between gap-4">
+      <span class="text-sm font-semibold tracking-tight">Mutezeze OS</span>
+      <span class="inline-flex items-center gap-2 text-xs meta text-ink-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
         Live · Day <span data-live-day>1</span>
       </span>
     </div>
   </div>
 
-  <nav class="max-w-3xl mx-auto px-6 mt-4 pb-4 border-b border-creamBorder">
-    <ul class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-700">
-      <li><a href="./index.html" class="text-dustyRose underline underline-offset-4">Home</a></li>
-      <li><a href="./today/index.html" class="hover:text-mustard">Today</a></li>
-      <li><a href="./insights/index.html" class="hover:text-petrol">Insights</a></li>
-      <li><a href="./diary/index.html" class="hover:text-plum">Library</a></li>
-      <li><a href="./about/index.html" class="hover:text-forest">About</a></li>
-      <li><a href="./index/index.html" class="hover:text-wine">Index</a></li>
-    </ul>
-  </nav>
-
-  <header class="max-w-3xl mx-auto px-6 pt-16 pb-10">
-    <div class="border-l-4 border-dustyRose pl-4">
-      <p class="text-sm meta text-dustyRose mb-3">Personal insight system</p>
+  <!-- Header + search -->
+  <header class="max-w-7xl mx-auto px-6 pt-12 pb-8">
+    <div class="border-l-4 border-accent pl-4 mb-8">
+      <p class="text-sm meta text-accent mb-3">Insight gallery</p>
       <h1 class="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
-        사진첩에 묻힌 인사이트,<br />카드뉴스로 자라난다.
+        인사이트가 된 장면들.
       </h1>
+      <p class="mt-4 text-ink-2" id="meta">로딩 중…</p>
     </div>
-    <p class="mt-6 text-ink-700 leading-relaxed max-w-xl">
-      A personal OS for capturing, tagging, and re-using what I learn —
-      from beauty summits, brand teardowns, and field notes.
-    </p>
-    <div class="mt-6">
-      <span class="status-chip"><span class="pulse"></span>Building from zero · started 2026.05.16</span>
+
+    <div class="relative max-w-xl">
+      <input id="search" type="search" placeholder="제목·태그로 검색…" autocomplete="off"
+        class="w-full bg-bg2 border border-line rounded-full pl-12 pr-4 py-3 text-ink-0 placeholder-ink-3 text-sm
+               focus:outline-none focus:border-accent transition" />
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+      </svg>
     </div>
   </header>
 
-  <div class="max-w-3xl mx-auto px-6 space-y-5 pb-16">
+  <!-- Gallery -->
+  <main class="max-w-7xl mx-auto px-6 pb-20">
+    <div id="loading" class="grid-gallery">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
 
-    <!-- Pipeline -->
-    <section class="card">
-      <div class="label mb-6">Three-Layer Pipeline</div>
-      <div class="space-y-5">
-        <div class="border-l-2 border-mustard pl-5">
-          <div class="text-sm meta text-mustard mb-1">01 · Capture</div>
-          <h3 class="font-medium">캡쳐·링크·노트를 텔레그램으로 던진다</h3>
-          <p class="text-sm text-ink-500 mt-1">Telegram bot · 자동 수신 · 즉시 보관</p>
-        </div>
-        <div class="border-l-2 border-petrol pl-5">
-          <div class="text-sm meta text-petrol mb-1">02 · Refine</div>
-          <h3 class="font-medium">Claude가 카테고리·태그·요약을 붙인다</h3>
-          <p class="text-sm text-ink-500 mt-1">Auto-tagging · Summarize · Categorize</p>
-        </div>
-        <div class="border-l-2 border-dustyRose pl-5">
-          <div class="text-sm meta text-dustyRose mb-1">03 · Surface</div>
-          <h3 class="font-medium">이 사이트에서 검색·인용·재사용</h3>
-          <p class="text-sm text-ink-500 mt-1">Insights · Diary · Index</p>
-        </div>
-      </div>
-    </section>
+    <div id="empty" class="hidden text-center py-24">
+      <div class="label mb-3 text-accent">No photos</div>
+      <p class="text-ink-2" id="empty-msg">아직 사진이 없어요.</p>
+    </div>
 
-    <!-- At a glance — live data -->
-    <section class="card">
-      <div class="flex items-baseline justify-between mb-6">
-        <div class="label">At a glance</div>
-        <span class="text-xs meta text-ink-500" id="last-synced">Last synced · not yet</span>
-      </div>
-      <div class="grid grid-cols-3 gap-6 max-w-md mb-7">
-        <div>
-          <div class="text-3xl meta text-ink-300" id="count-insights">—</div>
-          <div class="text-sm text-ink-500 mt-1">insights</div>
-        </div>
-        <div>
-          <div class="text-3xl meta text-ink-300" id="count-tags">—</div>
-          <div class="text-sm text-ink-500 mt-1">tags</div>
-        </div>
-        <div>
-          <div class="text-3xl meta">7</div>
-          <div class="text-sm text-ink-500 mt-1">categories ready</div>
-        </div>
-      </div>
-      <div class="border-t border-creamBorder/60 pt-6">
-        <div class="label mb-4">7 categories ready to receive</div>
-        <ul class="grid grid-cols-2 gap-y-2 gap-x-6">
-          <li class="flex items-center justify-between text-sm">
-            <span><span class="dot bg-wine mr-3"></span>브랜드 분석</span>
-            <span class="meta text-ink-500" data-cat-count="브랜드 분석"></span>
-          </li>
-          <li class="flex items-center justify-between text-sm">
-            <span><span class="dot bg-petrol mr-3"></span>글로벌 트렌드</span>
-            <span class="meta text-ink-500" data-cat-count="글로벌 트렌드"></span>
-          </li>
-          <li class="flex items-center justify-between text-sm">
-            <span><span class="dot bg-mustard mr-3"></span>강연 노트</span>
-            <span class="meta text-ink-500" data-cat-count="강연 노트"></span>
-          </li>
-          <li class="flex items-center justify-between text-sm">
-            <span><span class="dot bg-plum mr-3"></span>카피 라이브러리</span>
-            <span class="meta text-ink-500" data-cat-count="카피 라이브러리"></span>
-          </li>
-          <li class="flex items-center justify-between text-sm">
-            <span><span class="dot bg-camel mr-3"></span>패키지 리서치</span>
-            <span class="meta text-ink-500" data-cat-count="패키지 리서치"></span>
-          </li>
-          <li class="flex items-center justify-between text-sm">
-            <span><span class="dot bg-teal mr-3"></span>채널 운영</span>
-            <span class="meta text-ink-500" data-cat-count="채널 운영"></span>
-          </li>
-          <li class="flex items-center justify-between text-sm">
-            <span><span class="dot bg-moss mr-3"></span>크로스 산업</span>
-            <span class="meta text-ink-500" data-cat-count="크로스 산업"></span>
-          </li>
-        </ul>
-      </div>
-    </section>
+    <div id="grid" class="grid-gallery hidden"></div>
 
-    <!-- Jump in -->
-    <section class="card">
-      <div class="label mb-6">Jump in</div>
-      <ul class="space-y-3">
-        <li><a href="./today/index.html" class="group flex items-baseline justify-between hover:text-mustard">
-          <span>오늘 들어온 인풋 보기</span>
-          <span class="meta text-ink-500 group-hover:text-mustard text-sm">Today →</span>
-        </a></li>
-        <li><a href="./insights/index.html" class="group flex items-baseline justify-between hover:text-petrol">
-          <span>전체 인사이트 라이브러리</span>
-          <span class="meta text-ink-500 group-hover:text-petrol text-sm">Insights →</span>
-        </a></li>
-        <li><a href="./diary/index.html" class="group flex items-baseline justify-between hover:text-plum">
-          <span>다시 꺼내 쓰는 레퍼런스</span>
-          <span class="meta text-ink-500 group-hover:text-plum text-sm">Content Library →</span>
-        </a></li>
-        <li><a href="./about/index.html" class="group flex items-baseline justify-between hover:text-forest">
-          <span>이 OS가 어떻게 작동하는지</span>
-          <span class="meta text-ink-500 group-hover:text-forest text-sm">About →</span>
-        </a></li>
-      </ul>
-    </section>
+    <div id="more-wrap" class="hidden text-center mt-10">
+      <button id="more-btn" class="text-sm meta text-ink-2 border border-line rounded-full px-6 py-2.5 hover:border-accent hover:text-gold transition">
+        더 보기 <span id="more-count"></span>
+      </button>
+    </div>
+  </main>
 
-  </div>
-
-  <footer class="max-w-3xl mx-auto px-6 py-8 border-t border-creamBorder">
-    <div class="flex justify-between text-sm meta text-ink-500">
-      <span>Mutezeze OS</span>
-      <span>zezechoi.github.io/mutezeze</span>
+  <footer class="max-w-7xl mx-auto px-6 py-8 border-t border-line">
+    <div class="flex justify-between text-sm meta text-ink-3">
+      <span>Mutezeze OS · Zeze Choi</span>
+      <span>mutezeze.vercel.app</span>
     </div>
   </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center p-6">
+    <button id="lb-close" class="lb-btn" style="right:20px;top:20px;transform:none;">✕</button>
+    <button id="lb-prev" class="lb-btn" style="left:20px;">‹</button>
+    <button id="lb-next" class="lb-btn" style="right:20px;">›</button>
+    <figure class="text-center">
+      <img id="lb-img" src="" alt="" />
+      <figcaption id="lb-cap" class="mt-4 text-sm text-ink-1 meta"></figcaption>
+    </figure>
+  </div>
 
   <!-- ===== Supabase live data ===== -->
   <script type="module">
@@ -191,74 +142,138 @@
 
     const SUPABASE_URL = '__SUPABASE_URL__';
     const SUPABASE_KEY = '__SUPABASE_ANON_KEY__';
-
     const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function timeAgo(iso) {
-      const sec = Math.floor((new Date() - new Date(iso)) / 1000);
-      if (sec < 60) return 'just now';
-      const m = Math.floor(sec/60); if (m < 60) return `${m} min ago`;
-      const h = Math.floor(m/60);   if (h < 24) return `${h} hours ago`;
-      return `${Math.floor(h/24)} days ago`;
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const PAGE = 60;
+
+    let all = [];        // all rows
+    let filtered = [];   // after search
+    let shown = 0;
+
+    const loadingEl = document.getElementById('loading');
+    const gridEl = document.getElementById('grid');
+    const emptyEl = document.getElementById('empty');
+    const emptyMsg = document.getElementById('empty-msg');
+    const metaEl = document.getElementById('meta');
+    const moreWrap = document.getElementById('more-wrap');
+    const moreBtn = document.getElementById('more-btn');
+    const moreCount = document.getElementById('more-count');
+    const searchEl = document.getElementById('search');
+
+    function cellHtml(r, idx) {
+      return `
+        <div class="cell" data-idx="${idx}">
+          <img src="${esc(r.image_url)}" loading="lazy" alt="${esc(r.title || '')}" />
+          ${r.title ? `<span class="cap">${esc(r.title)}</span>` : ''}
+        </div>`;
     }
 
-    function setLive(el, value) {
-      el.textContent = value;
-      el.classList.remove('text-ink-300');
+    function resetGrid() {
+      gridEl.innerHTML = '';
+      shown = 0;
+      renderNext();
     }
 
+    function renderNext() {
+      const slice = filtered.slice(shown, shown + PAGE);
+      gridEl.insertAdjacentHTML('beforeend', slice.map((r) => cellHtml(r, all.indexOf(r))).join(''));
+      shown += slice.length;
+      const remaining = filtered.length - shown;
+      moreWrap.classList.toggle('hidden', remaining <= 0);
+      if (remaining > 0) moreCount.textContent = `(${remaining})`;
+    }
+
+    function applySearch(q) {
+      q = q.trim().toLowerCase();
+      filtered = !q ? all : all.filter(r => {
+        const hay = `${r.title || ''} ${(r.tags||[]).join(' ')} ${r.category || ''}`.toLowerCase();
+        return hay.includes(q);
+      });
+      gridEl.classList.toggle('hidden', filtered.length === 0);
+      emptyEl.classList.toggle('hidden', filtered.length !== 0);
+      if (filtered.length === 0) emptyMsg.textContent = `"${q}" 검색 결과가 없어요.`;
+      metaEl.textContent = q ? `${filtered.length} / ${all.length} photos` : `${all.length} photos · 던지면 쌓이는 시각 아카이브`;
+      resetGrid();
+    }
+
+    let searchTimer;
+    searchEl.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => applySearch(searchEl.value), 180);
+    });
+    moreBtn.addEventListener('click', renderNext);
+
+    // ── Lightbox ──
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lb-img');
+    const lbCap = document.getElementById('lb-cap');
+    let lbIndex = -1;
+
+    function openLightbox(idx) {
+      lbIndex = idx;
+      const r = all[idx];
+      if (!r) return;
+      lbImg.src = r.image_url;
+      lbCap.textContent = r.title || '';
+      lb.classList.remove('hidden');
+      lb.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lb.classList.add('hidden');
+      lb.classList.remove('flex');
+      lbImg.src = '';
+      document.body.style.overflow = '';
+    }
+    function step(dir) {
+      // navigate within filtered set
+      const pos = filtered.indexOf(all[lbIndex]);
+      const next = filtered[pos + dir];
+      if (next) openLightbox(all.indexOf(next));
+    }
+
+    gridEl.addEventListener('click', (e) => {
+      const cell = e.target.closest('.cell');
+      if (cell) openLightbox(parseInt(cell.dataset.idx, 10));
+    });
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); step(-1); });
+    document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); step(1); });
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); }); // 바깥 클릭
+    document.addEventListener('keydown', (e) => {
+      if (lb.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') step(-1);
+      else if (e.key === 'ArrowRight') step(1);
+    });
+
+    // ── Load ──
     (async () => {
       try {
-        const { data: rows, error } = await sb
+        const { data, error } = await sb
           .from('contents')
-          .select('tags, category, created_at')
-          .order('created_at', { ascending: false });
-        if (error) { console.warn('supabase error', error); return; }
-        if (!rows || rows.length === 0) return; // 빈 상태 유지
+          .select('id, title, image_url, tags, category, created_at')
+          .not('image_url', 'is', null)
+          .order('created_at', { ascending: false })
+          .limit(1000);
 
-        // total insights
-        setLive(document.getElementById('count-insights'), rows.length);
+        loadingEl.classList.add('hidden');
+        if (error) { console.warn('gallery error', error); emptyEl.classList.remove('hidden'); emptyMsg.textContent='불러오기 실패'; metaEl.textContent=''; return; }
+        if (!data || data.length === 0) { emptyEl.classList.remove('hidden'); metaEl.textContent='0 photos'; return; }
 
-        // distinct tags
-        const tagSet = new Set();
-        const catCount = {};
-        rows.forEach(r => {
-          (r.tags || []).forEach(t => tagSet.add(t));
-          if (r.category) catCount[r.category] = (catCount[r.category]||0) + 1;
-        });
-        if (tagSet.size > 0) setLive(document.getElementById('count-tags'), tagSet.size);
-
-        // per-category counts
-        document.querySelectorAll('[data-cat-count]').forEach(el => {
-          const cat = el.getAttribute('data-cat-count');
-          if (catCount[cat]) {
-            el.textContent = catCount[cat];
-            el.classList.remove('text-ink-300');
-            el.classList.add('text-ink-500');
-          }
-        });
-
-        // last synced
-        if (rows[0]?.created_at) {
-          document.getElementById('last-synced').textContent = `Last synced · ${timeAgo(rows[0].created_at)}`;
-        }
+        all = data;
+        filtered = data;
+        metaEl.textContent = `${data.length} photos · 던지면 쌓이는 시각 아카이브`;
+        gridEl.classList.remove('hidden');
+        renderNext();
       } catch (e) {
-        console.warn('home fetch failed', e);
+        console.warn('gallery failed', e);
+        loadingEl.classList.add('hidden');
+        emptyEl.classList.remove('hidden');
       }
     })();
   </script>
 
-  <script>
-    // Auto-update "Day N" label based on launch date.
-    (function () {
-      var start = new Date('2026-05-16T00:00:00');
-      var now   = new Date();
-      start.setHours(0,0,0,0); now.setHours(0,0,0,0);
-      var day = Math.max(1, Math.floor((now - start) / 86400000) + 1);
-      document.querySelectorAll('[data-live-day]').forEach(function (el) {
-        el.textContent = day;
-      });
-    })();
-  </script>
 </body>
 </html>
