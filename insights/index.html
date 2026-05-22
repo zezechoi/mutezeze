@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mutezeze OS — Insights</title>
+  <title>Mutezeze OS — Gallery</title>
   <link rel="stylesheet" as="style" crossorigin
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,190 +13,108 @@
         extend: {
           fontFamily: { sans: ['Pretendard Variable','Pretendard','system-ui','sans-serif'] },
           colors: {
-            cream:'#F4EFE6', creamBorder:'#E2D7BF', creamMuted:'#EDE6D6',
-            rose:'#C76784', dustyRose:'#9F6463', wine:'#B5454C', coral:'#D77C56',
-            mustard:'#D6A53D', sand:'#C9AC6F', taupe:'#897866', camel:'#9C7B57',
-            olive:'#8C8754', moss:'#587749', forest:'#4F5E4D', teal:'#6E9696',
-            slate:'#5E7691', petrol:'#3F6F86', plum:'#946683', purple:'#715378',
-            ink:{900:'#111111',700:'#3a3a3a',500:'#6b6b6b',300:'#bdbdbd'},
-            paper:{50:'#fafafa',100:'#f3f3f3',200:'#e8e8e8'}
+            bg:'#0E0C0A', bg2:'#161310', bg3:'#1E1A16', line:'#2A2420',
+            ink:{0:'#F0EAE0', 1:'#C9BEAE', 2:'#8A7C6B', 3:'#6B5E50'},
+            accent:'#C4753A', gold:'#D4A853'
           }
         }
       }
     };
   </script>
   <style>
-    body { font-feature-settings:'ss01','ss02'; }
+    body { font-feature-settings:'ss01','ss02'; background:#0E0C0A; }
     .meta { font-variant-numeric: tabular-nums; letter-spacing:.02em; }
-    .card { background:#fff; border:1px solid #E2D7BF; border-radius:10px; padding:24px; box-shadow:0 1px 0 rgba(120,95,50,.04); }
-    .label { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#6b6b6b; font-weight:500; }
-    .chip { display:inline-block; padding:2px 8px; border-radius:9999px; font-size:11px; font-weight:500; }
-    .dot { display:inline-block; width:6px; height:6px; border-radius:9999px; margin-right:6px; vertical-align:middle; }
-    .empty-card { background:#fff; border:1px dashed #C8B998; border-radius:10px; padding:40px 28px; }
-    .num { font-variant-numeric: tabular-nums; color:#bdbdbd; width:32px; flex-shrink:0; }
-    a.row-link { display:block; color:inherit; text-decoration:none; margin: 0 -10px; padding: 0 10px; border-radius:6px; transition: background .12s ease; }
-    a.row-link:hover { background:#EDE6D6; }
-    .filter-chip { cursor: pointer; user-select: none; transition: opacity .12s ease, box-shadow .12s ease; }
-    .filter-chip[aria-pressed="false"] { opacity: .35; }
-    .filter-chip:hover { opacity: 1; }
-    .filter-chip.is-active { box-shadow: 0 0 0 1px currentColor inset; }
-    .group-chip { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:9999px; font-size:12px; font-weight:500; background:#FFFFFF; border:1px solid #E2D7BF; color:#3a3a3a; cursor:pointer; user-select:none; transition: background .12s ease, border-color .12s ease; }
-    .group-chip .count { font-variant-numeric: tabular-nums; color:#6b6b6b; font-size:11px; background:#F4EFE6; padding:0 6px; border-radius:9999px; }
-    .group-chip:hover { border-color:#C8B998; background:#FAF6EC; }
-    .group-chip.is-active { background:#3F6F86; color:#fff; border-color:#3F6F86; }
-    .group-chip.is-active .count { background:rgba(255,255,255,.18); color:#fff; }
-    .pov-card { background:#fff; border:1px solid #E2D7BF; border-radius:10px; padding:28px 24px; box-shadow:0 1px 0 rgba(120,95,50,.04); border-left:4px solid #9F6463; }
-    .pov-quote { font-size:15px; line-height:1.7; color:#3a3a3a; padding:10px 0; border-bottom:1px solid #EDE6D6; word-break: keep-all; }
-    .pov-quote:last-child { border-bottom:0; }
-    .pov-quote::before { content:'"'; color:#C8B998; font-size:18px; margin-right:6px; vertical-align:-2px; }
-    .kw-chip { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:9999px; font-size:13px; font-weight:500; background:#F4EFE6; color:#3a3a3a; }
-    .kw-chip .kw-count { font-size:11px; color:#6b6b6b; font-variant-numeric: tabular-nums; }
+    .label { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8A7C6B; font-weight:500; }
+
+    /* masonry */
+    .gallery { column-count: 4; column-gap: 10px; }
+    @media (max-width:1024px){ .gallery { column-count: 3; } }
+    @media (max-width:640px){ .gallery { column-count: 2; } }
+    .shot {
+      display:block; break-inside:avoid; margin-bottom:10px;
+      position:relative; border-radius:8px; overflow:hidden;
+      background:#161310; border:1px solid #2A2420;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .shot img { display:block; width:100%; height:auto; }
+    .shot:hover { transform: translateY(-2px); border-color:#C4753A; box-shadow:0 8px 28px rgba(0,0,0,.5); }
+    .shot .cap {
+      position:absolute; left:0; right:0; bottom:0;
+      padding:18px 12px 10px; font-size:11px; color:#F0EAE0;
+      background:linear-gradient(to top, rgba(14,12,10,.85), rgba(14,12,10,0));
+      opacity:0; transition:opacity .18s ease; letter-spacing:.01em;
+    }
+    .shot:hover .cap { opacity:1; }
+    .skeleton { background:#1E1A16; border-radius:8px; margin-bottom:10px; break-inside:avoid; }
   </style>
 </head>
-<body class="bg-cream text-ink-900 font-sans antialiased">
+<body class="text-ink-0 font-sans antialiased">
 
-  <div class="max-w-3xl mx-auto px-6 pt-8">
-    <div class="flex items-center justify-end text-xs meta text-ink-500">
+  <div class="max-w-6xl mx-auto px-6 pt-8">
+    <div class="flex items-center justify-end text-xs meta text-ink-3">
       <span class="inline-flex items-center gap-2">
-        <span class="w-1.5 h-1.5 rounded-full bg-mustard animate-pulse"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
         Live · Day <span data-live-day>1</span>
       </span>
     </div>
   </div>
 
-  <nav class="max-w-3xl mx-auto px-6 mt-4 pb-4 border-b border-creamBorder">
-    <ul class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-700">
-      <li><a href="../index.html" class="hover:text-dustyRose">Home</a></li>
-      <li><a href="../today/index.html" class="hover:text-mustard">Today</a></li>
-      <li><a href="./index.html" class="text-petrol underline underline-offset-4">Insights</a></li>
-      <li><a href="../diary/index.html" class="hover:text-plum">Library</a></li>
-      <li><a href="../about/index.html" class="hover:text-forest">About</a></li>
-      <li><a href="../index/index.html" class="hover:text-wine">Index</a></li>
+  <nav class="max-w-6xl mx-auto px-6 mt-4 pb-4 border-b border-line">
+    <ul class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-2">
+      <li><a href="../index.html" class="hover:text-ink-0">Home</a></li>
+      <li><a href="../today/index.html" class="hover:text-ink-0">Today</a></li>
+      <li><a href="./index.html" class="text-gold underline underline-offset-4">Gallery</a></li>
+      <li><a href="../diary/index.html" class="hover:text-ink-0">Library</a></li>
+      <li><a href="../about/index.html" class="hover:text-ink-0">About</a></li>
+      <li><a href="../index/index.html" class="hover:text-ink-0">Index</a></li>
     </ul>
   </nav>
 
-  <header class="max-w-3xl mx-auto px-6 pt-16 pb-10">
-    <div class="border-l-4 border-petrol pl-4">
-      <p class="text-sm meta text-petrol mb-3">Insights library</p>
+  <header class="max-w-6xl mx-auto px-6 pt-14 pb-10">
+    <div class="border-l-4 border-accent pl-4">
+      <p class="text-sm meta text-accent mb-3">Visual archive</p>
       <h1 class="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
-        꺼내쓰는 인사이트.
+        쌓인 감각, 무드보드.
       </h1>
-      <p class="mt-4 text-ink-700" id="insights-meta">쌓는 중 · 카드뉴스 소재가 필요할 때 여기서 꺼낸다.</p>
+      <p class="mt-4 text-ink-2" id="gallery-meta">로딩 중…</p>
     </div>
   </header>
 
-  <div class="max-w-3xl mx-auto px-6 space-y-5 pb-16">
-
-    <!-- 제제의 시선 — 운영자 commentary -->
-    <section class="pov-card">
-      <div class="flex items-baseline justify-between mb-5">
-        <div class="label" style="color:#9F6463;">제제의 시선</div>
-        <span class="text-xs meta text-ink-500">운영자 commentary</span>
-      </div>
-
-      <div class="mb-6">
-        <div class="text-xs meta text-ink-500 mb-3" style="letter-spacing:.08em;">한 줄 모음</div>
-        <ul id="oneliners-list" class="space-y-1">
-          <li class="text-sm text-ink-500 italic">아직 모인 한 줄이 없습니다. 텔레그램에 짧은 한 줄을 던지면 여기에 쌓입니다.</li>
-        </ul>
-      </div>
-
-      <div class="pt-5 border-t border-creamBorder/60">
-        <div class="text-xs meta text-ink-500 mb-3" style="letter-spacing:.08em;">반복 키워드</div>
-        <div id="keyword-chips" class="flex flex-wrap gap-2">
-          <span class="text-sm text-ink-500 italic">계산 중…</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Categories card -->
-    <section class="card">
-      <div class="mb-5">
-        <div class="label">Categories</div>
-      </div>
-      <div class="flex flex-wrap gap-2" id="cat-chips">
-        <span class="chip filter-chip" role="button" tabindex="0" aria-pressed="true" data-cat="브랜드 분석" style="background:#B5454C1A;color:#B5454C;"><span class="dot" style="background:#B5454C"></span>브랜드 분석</span>
-        <span class="chip filter-chip" role="button" tabindex="0" aria-pressed="true" data-cat="글로벌 트렌드" style="background:#3F6F861A;color:#3F6F86;"><span class="dot" style="background:#3F6F86"></span>글로벌 트렌드</span>
-        <span class="chip filter-chip" role="button" tabindex="0" aria-pressed="true" data-cat="강연 노트" style="background:#D6A53D1A;color:#D6A53D;"><span class="dot" style="background:#D6A53D"></span>강연 노트</span>
-        <span class="chip filter-chip" role="button" tabindex="0" aria-pressed="true" data-cat="카피 라이브러리" style="background:#9466831A;color:#946683;"><span class="dot" style="background:#946683"></span>카피 라이브러리</span>
-        <span class="chip filter-chip" role="button" tabindex="0" aria-pressed="true" data-cat="패키지 리서치" style="background:#9C7B571A;color:#9C7B57;"><span class="dot" style="background:#9C7B57"></span>패키지 리서치</span>
-        <span class="chip filter-chip" role="button" tabindex="0" aria-pressed="true" data-cat="채널 운영" style="background:#6E96961A;color:#6E9696;"><span class="dot" style="background:#6E9696"></span>채널 운영</span>
-        <span class="chip filter-chip" role="button" tabindex="0" aria-pressed="true" data-cat="크로스 산업" style="background:#5877491A;color:#587749;"><span class="dot" style="background:#587749"></span>크로스 산업</span>
-      </div>
-      <div class="flex items-center justify-between mt-4">
-        <p class="text-xs meta text-ink-500">칩을 눌러 필터링 · 인풋이 들어오면 자동 분류됩니다.</p>
-        <button id="reset-filter" type="button" class="text-xs meta text-ink-500 hover:text-ink-900 hidden">전체 보기 ↻</button>
-      </div>
-    </section>
-
-    <!-- Series — placeholder (Phase 2: link to insta posts) -->
-    <section class="card">
-      <div class="flex items-baseline justify-between mb-5">
-        <div class="label">Series · 브랜드의 목소리를 듣다</div>
-        <a href="https://www.instagram.com/zeze_beautynote/" target="_blank" rel="noopener" class="text-xs meta text-ink-500 hover:text-petrol underline underline-offset-2">@zeze_beautynote →</a>
-      </div>
-      <p class="text-sm text-ink-700 mb-4">
-        Instagram에서 운영 중인 카드뉴스 시리즈.
-        Supabase 연동 후 발행 정보가 여기에 자동으로 모입니다.
+  <main class="max-w-6xl mx-auto px-6 pb-20">
+    <!-- empty state -->
+    <div id="empty-state" class="hidden text-center py-24">
+      <div class="label mb-3 text-accent">Awaiting photos</div>
+      <p class="text-ink-2 leading-relaxed max-w-md mx-auto">
+        아직 사진이 없어요. 텔레그램에 캡쳐를 던지거나 일괄 업로드가 끝나면 여기에 무드보드로 쌓입니다.
       </p>
-      <ul class="space-y-1">
-        <li class="flex items-baseline gap-4 py-2.5 border-b border-creamBorder/60 opacity-60">
-          <span class="meta text-sm text-ink-300 w-8">01</span>
-          <span class="chip bg-wine/10 text-wine">브랜드 분석</span>
-          <span class="flex-1 truncate">케어드</span>
-          <span class="text-sm meta text-ink-500">발행</span>
-        </li>
-        <li class="flex items-baseline gap-4 py-2.5 border-b border-creamBorder/60 opacity-60">
-          <span class="meta text-sm text-ink-300 w-8">02</span>
-          <span class="chip bg-wine/10 text-wine">브랜드 분석</span>
-          <span class="flex-1 truncate">히야</span>
-          <span class="text-sm meta text-ink-500">발행</span>
-        </li>
-        <li class="flex items-baseline gap-4 py-2.5 opacity-60">
-          <span class="meta text-sm text-ink-300 w-8">03</span>
-          <span class="chip bg-wine/10 text-wine">브랜드 분석</span>
-          <span class="flex-1 truncate">파넬</span>
-          <span class="text-sm meta text-ink-500">발행</span>
-        </li>
-      </ul>
-    </section>
+    </div>
 
-    <!-- Groups — multi-item tags (events/topics) -->
-    <section class="card hidden" id="groups-section">
-      <div class="flex items-baseline justify-between mb-3">
-        <div class="label">Groups</div>
-        <span class="text-xs meta text-ink-500">2건 이상 묶이는 태그 · 같은 이벤트/주제</span>
-      </div>
-      <div class="flex flex-wrap gap-2" id="group-chips"></div>
-    </section>
+    <!-- loading skeleton -->
+    <div id="loading" class="gallery">
+      <div class="skeleton" style="height:220px"></div>
+      <div class="skeleton" style="height:300px"></div>
+      <div class="skeleton" style="height:180px"></div>
+      <div class="skeleton" style="height:260px"></div>
+      <div class="skeleton" style="height:240px"></div>
+      <div class="skeleton" style="height:200px"></div>
+      <div class="skeleton" style="height:320px"></div>
+      <div class="skeleton" style="height:190px"></div>
+    </div>
 
-    <!-- All insights — data state -->
-    <section class="card hidden" id="data-state">
-      <div class="flex items-baseline justify-between mb-5">
-        <div class="label">All insights</div>
-        <span class="text-xs meta text-ink-500" id="all-count">latest first</span>
-      </div>
-      <ul class="divide-y divide-creamBorder/60" id="all-list"></ul>
-    </section>
+    <!-- gallery -->
+    <div id="gallery" class="gallery hidden"></div>
 
-    <!-- All insights — empty state -->
-    <section class="empty-card text-center" id="empty-state">
-      <div class="label mb-4 text-petrol">Awaiting first insight</div>
-      <h2 class="text-xl font-medium mb-3">아직 라이브러리가 비어있어요.</h2>
-      <p class="text-ink-700 leading-relaxed max-w-md mx-auto">
-        텔레그램 봇에 인사이트를 던지면, Claude가 자동으로 분류·태그·요약해서 여기에 쌓입니다.
-      </p>
-      <p class="mt-6 text-sm meta text-ink-500">
-        Started 2026.05.16 · #01부터 매겨집니다
-      </p>
-    </section>
+    <div id="more-wrap" class="hidden text-center mt-10">
+      <button id="more-btn" class="text-sm meta text-ink-2 border border-line rounded-full px-6 py-2.5 hover:border-accent hover:text-gold transition">
+        더 보기 <span id="more-count"></span>
+      </button>
+    </div>
+  </main>
 
-  </div>
-
-  <footer class="max-w-3xl mx-auto px-6 py-8 border-t border-creamBorder">
-    <div class="flex justify-between text-sm meta text-ink-500">
+  <footer class="max-w-6xl mx-auto px-6 py-8 border-t border-line">
+    <div class="flex justify-between text-sm meta text-ink-3">
       <span>Mutezeze OS</span>
-      <span>zezechoi.github.io/mutezeze</span>
+      <span>mutezeze.vercel.app</span>
     </div>
   </footer>
 
@@ -206,234 +124,67 @@
 
     const SUPABASE_URL = '__SUPABASE_URL__';
     const SUPABASE_KEY = '__SUPABASE_ANON_KEY__';
-
     const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    const CAT_HEX = {
-      '브랜드 분석':'#B5454C','글로벌 트렌드':'#3F6F86','강연 노트':'#D6A53D',
-      '카피 라이브러리':'#946683','패키지 리서치':'#9C7B57','채널 운영':'#6E9696','크로스 산업':'#587749'
-    };
-
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const PAGE = 60;
+    let rows = [];
+    let shown = 0;
 
-    function fmtDate(iso) {
-      const d = new Date(iso);
-      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
-    }
+    const galleryEl = document.getElementById('gallery');
+    const loadingEl = document.getElementById('loading');
+    const emptyEl = document.getElementById('empty-state');
+    const moreWrap = document.getElementById('more-wrap');
+    const moreBtn = document.getElementById('more-btn');
+    const moreCount = document.getElementById('more-count');
+    const metaEl = document.getElementById('gallery-meta');
 
-    function renderRow(row, num) {
-      const hex = CAT_HEX[row.category] || '#897866';
-      return `
-        <li>
-          <a href="../detail/?id=${encodeURIComponent(row.id)}" class="row-link">
-            <div class="flex items-baseline gap-4 py-3.5">
-              <span class="num meta text-sm">${String(num).padStart(2,'0')}</span>
-              <span class="chip" style="background:${hex}1A;color:${hex};">${esc(row.category || '미분류')}</span>
-              <span class="flex-1 truncate">${esc(row.title || '(제목 없음)')}</span>
-              <span class="text-sm meta text-ink-500">${fmtDate(row.created_at)}</span>
-            </div>
-          </a>
-        </li>
-      `;
-    }
-
-    let allRows = [];
-    const activeCats = new Set();
-    let filterMode = 'all'; // 'all' (모든 칩 활성) | 'subset' (선택된 카테고리만)
-    const activeGroups = new Set(); // 선택된 그룹 태그
-
-    function renderList() {
-      const list = document.getElementById('all-list');
-      const allCountEl = document.getElementById('all-count');
-      if (!allRows.length) return;
-
-      let filtered = allRows;
-      if (filterMode === 'subset') {
-        filtered = filtered.filter(r => activeCats.has(r.category));
-      }
-      if (activeGroups.size > 0) {
-        filtered = filtered.filter(r => Array.isArray(r.tags) && r.tags.some(t => activeGroups.has(t)));
-      }
-
-      list.innerHTML = filtered.map((r, i) => renderRow(r, filtered.length - i)).join('');
-
-      const isFiltered = filterMode === 'subset' || activeGroups.size > 0;
-      if (isFiltered) {
-        allCountEl.textContent = `${filtered.length} / ${allRows.length} items · filtered`;
-      } else {
-        allCountEl.textContent = `${allRows.length} items · latest first`;
-      }
-    }
-
-    function updateChipStates() {
-      document.querySelectorAll('.filter-chip').forEach(el => {
-        const c = el.getAttribute('data-cat');
-        const isOn = filterMode === 'all' || activeCats.has(c);
-        el.setAttribute('aria-pressed', isOn ? 'true' : 'false');
-        el.classList.toggle('is-active', filterMode === 'subset' && activeCats.has(c));
-      });
-      document.getElementById('reset-filter').classList.toggle('hidden', filterMode === 'all');
-    }
-
-    function toggleCategory(cat) {
-      if (filterMode === 'all') {
-        // 첫 칩 클릭 → subset 모드로 전환, 클릭한 카테고리만 활성
-        filterMode = 'subset';
-        activeCats.clear();
-        activeCats.add(cat);
-      } else {
-        if (activeCats.has(cat)) activeCats.delete(cat);
-        else activeCats.add(cat);
-        if (activeCats.size === 0) filterMode = 'all';
-      }
-      updateChipStates();
-      renderList();
-    }
-
-    function resetFilter() {
-      filterMode = 'all';
-      activeCats.clear();
-      updateChipStates();
-      renderList();
-    }
-
-    document.querySelectorAll('.filter-chip').forEach(el => {
-      const cat = el.getAttribute('data-cat');
-      el.addEventListener('click', () => toggleCategory(cat));
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCategory(cat); }
-      });
-    });
-    document.getElementById('reset-filter').addEventListener('click', resetFilter);
-
-    function toggleGroup(tag) {
-      if (activeGroups.has(tag)) activeGroups.delete(tag);
-      else activeGroups.add(tag);
-      document.querySelectorAll('.group-chip').forEach(el => {
-        el.classList.toggle('is-active', activeGroups.has(el.getAttribute('data-tag')));
-      });
-      renderList();
-    }
-
-    // 이벤트 태그 판별: 4자리 연도(20XX)가 포함되면 이벤트로 간주.
-    // 일반 카테고리성 태그("강연", "USP")는 연도가 없어 제외됨.
-    // "BBIS2026", "BBIS 2026", "CES2026" 등 공백 유무 모두 매칭하도록 단어 경계 미사용.
-    function isEventTag(tag) {
-      return /20\d{2}/.test(tag);
-    }
-
-    function renderOneliners(rows) {
-      const list = document.getElementById('oneliners-list');
-      const items = rows.filter(r => Array.isArray(r.tags) && r.tags.includes('나의한줄'));
-      if (items.length === 0) {
-        list.innerHTML = '<li class="text-sm text-ink-500 italic">아직 모인 한 줄이 없습니다. 텔레그램에 짧은 한 줄을 던지면서 태그 "나의한줄"을 붙이면 여기에 쌓입니다.</li>';
-        return;
-      }
-      list.innerHTML = items.map(r => {
-        const text = (r.insight || r.title || '').trim();
-        return `<li class="pov-quote"><a href="../detail/?id=${encodeURIComponent(r.id)}" class="hover:underline" style="color:inherit; text-decoration:none;">${esc(text)}</a></li>`;
-      }).join('');
-    }
-
-    function renderRecurringKeywords(rows) {
-      const tagCount = new Map();
-      for (const r of rows) {
-        if (!Array.isArray(r.tags)) continue;
-        for (const t of r.tags) {
-          if (!t || isEventTag(t)) continue; // 이벤트 태그(BBIS2026 등)는 별도 Groups에서 다룸
-          tagCount.set(t, (tagCount.get(t) || 0) + 1);
-        }
-      }
-      const sorted = [...tagCount.entries()]
-        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-        .slice(0, 12);
-
-      const wrap = document.getElementById('keyword-chips');
-      if (sorted.length === 0) {
-        wrap.innerHTML = '<span class="text-sm text-ink-500 italic">키워드가 아직 모이지 않았습니다.</span>';
-        return;
-      }
-      wrap.innerHTML = sorted.map(([tag, n]) => `
-        <span class="kw-chip">${esc(tag)}${n > 1 ? `<span class="kw-count">${n}</span>` : ''}</span>
+    function renderNext() {
+      const slice = rows.slice(shown, shown + PAGE);
+      const html = slice.map(r => `
+        <a href="../detail/?id=${encodeURIComponent(r.id)}" class="shot">
+          <img src="${esc(r.image_url)}" loading="lazy" alt="${esc(r.title || '')}" />
+          ${r.title ? `<span class="cap">${esc(r.title)}</span>` : ''}
+        </a>
       `).join('');
+      galleryEl.insertAdjacentHTML('beforeend', html);
+      shown += slice.length;
+      const remaining = rows.length - shown;
+      if (remaining > 0) {
+        moreWrap.classList.remove('hidden');
+        moreCount.textContent = `(${remaining})`;
+      } else {
+        moreWrap.classList.add('hidden');
+      }
     }
 
-    function renderGroupChips(rows) {
-      const tagCount = new Map();
-      for (const r of rows) {
-        if (!Array.isArray(r.tags)) continue;
-        for (const t of r.tags) {
-          if (!t || !isEventTag(t)) continue;
-          tagCount.set(t, (tagCount.get(t) || 0) + 1);
-        }
-      }
-      const groups = [...tagCount.entries()]
-        .filter(([, n]) => n >= 2)
-        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-
-      const wrap = document.getElementById('group-chips');
-      const section = document.getElementById('groups-section');
-      if (groups.length === 0) {
-        section.classList.add('hidden');
-        return;
-      }
-      wrap.innerHTML = groups.map(([tag, n]) => `
-        <span class="group-chip" role="button" tabindex="0" data-tag="${esc(tag)}">
-          ${esc(tag)} <span class="count">${n}</span>
-        </span>
-      `).join('');
-      section.classList.remove('hidden');
-
-      wrap.querySelectorAll('.group-chip').forEach(el => {
-        const tag = el.getAttribute('data-tag');
-        el.addEventListener('click', () => toggleGroup(tag));
-        el.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleGroup(tag); }
-        });
-      });
-    }
+    moreBtn.addEventListener('click', renderNext);
 
     (async () => {
       try {
         const { data, error } = await sb
           .from('contents')
-          .select('*')
-          .order('created_at', { ascending: false });
-        if (error) { console.warn('insights fetch error', error); return; }
-        if (!data || data.length === 0) return; // 빈 상태 유지
+          .select('id, title, image_url, created_at')
+          .not('image_url', 'is', null)
+          .order('created_at', { ascending: false })
+          .limit(1000);
 
-        allRows = data;
+        loadingEl.classList.add('hidden');
 
-        document.getElementById('insights-meta').textContent = '카드뉴스 소재가 필요할 때 여기서 꺼낸다.';
+        if (error) { console.warn('gallery fetch error', error); emptyEl.classList.remove('hidden'); metaEl.textContent = '불러오기 실패'; return; }
+        if (!data || data.length === 0) { emptyEl.classList.remove('hidden'); metaEl.textContent = '0 photos'; return; }
 
-        // 제제의 시선 — 한 줄 모음 + 반복 키워드
-        renderOneliners(data);
-        renderRecurringKeywords(data);
-
-        // Groups
-        renderGroupChips(data);
-
-        // All insights list
-        document.getElementById('empty-state').classList.add('hidden');
-        document.getElementById('data-state').classList.remove('hidden');
-        renderList();
+        rows = data;
+        metaEl.textContent = `${data.length} photos · 던지면 쌓이는 시각 아카이브`;
+        galleryEl.classList.remove('hidden');
+        renderNext();
       } catch (e) {
-        console.warn('insights fetch failed', e);
+        console.warn('gallery failed', e);
+        loadingEl.classList.add('hidden');
+        emptyEl.classList.remove('hidden');
       }
     })();
   </script>
 
-  <script>
-    // Auto-update "Day N" label based on launch date.
-    (function () {
-      var start = new Date('2026-05-16T00:00:00');
-      var now   = new Date();
-      start.setHours(0,0,0,0); now.setHours(0,0,0,0);
-      var day = Math.max(1, Math.floor((now - start) / 86400000) + 1);
-      document.querySelectorAll('[data-live-day]').forEach(function (el) {
-        el.textContent = day;
-      });
-    })();
-  </script>
 </body>
 </html>
