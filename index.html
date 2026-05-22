@@ -60,6 +60,13 @@
 
     .skeleton { aspect-ratio:1/1; background:#1E1A16; border-radius:8px; animation:pulse 1.6s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+    /* tabs */
+    .tab { padding:8px 18px 13px; margin-bottom:-13px; font-size:13px; color:#8A7C6B; cursor:pointer;
+      background:transparent; border:none; border-radius:8px 8px 0 0; transition:color .15s, background .15s, border-color .15s;
+      border-bottom:2px solid transparent; }
+    .tab:hover { color:#F0EAE0; }
+    .tab.is-active { color:#F0EAE0; border-bottom-color:#C4753A; }
   </style>
 </head>
 <body class="text-ink-0 font-sans antialiased">
@@ -75,17 +82,26 @@
     </div>
   </div>
 
-  <!-- Header + search -->
+  <!-- Tabs -->
+  <nav class="max-w-7xl mx-auto px-6 mt-6">
+    <div class="flex gap-1.5 border-b border-line pb-3">
+      <button class="tab is-active" data-tab="gallery">Gallery</button>
+      <button class="tab" data-tab="search">Search</button>
+    </div>
+  </nav>
+
+  <!-- Header -->
   <header class="max-w-7xl mx-auto px-6 pt-12 pb-8">
     <div class="border-l-4 border-accent pl-4 mb-8">
-      <p class="text-sm meta text-accent mb-3">Insight gallery</p>
-      <h1 class="text-3xl md:text-4xl leading-tight font-semibold tracking-tight">
+      <p class="text-sm meta text-accent mb-3" id="kicker">Insight gallery</p>
+      <h1 class="text-3xl md:text-4xl leading-tight font-semibold tracking-tight" id="title">
         인사이트가 된 장면들.
       </h1>
       <p class="mt-4 text-ink-2" id="meta">로딩 중…</p>
     </div>
 
-    <div class="relative max-w-xl">
+    <!-- Search bar (shown on Search tab) -->
+    <div id="search-wrap" class="relative max-w-xl hidden">
       <input id="search" type="search" placeholder="제목·태그로 검색…" autocomplete="off"
         class="w-full bg-bg2 border border-line rounded-full pl-12 pr-4 py-3 text-ink-0 placeholder-ink-3 text-sm
                focus:outline-none focus:border-accent transition" />
@@ -203,6 +219,27 @@
       searchTimer = setTimeout(() => applySearch(searchEl.value), 180);
     });
     moreBtn.addEventListener('click', renderNext);
+
+    // ── Tabs (Gallery / Search) ──
+    const tabs = document.querySelectorAll('.tab');
+    const searchWrap = document.getElementById('search-wrap');
+    const kicker = document.getElementById('kicker');
+    const titleEl = document.getElementById('title');
+    tabs.forEach(t => t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('is-active'));
+      t.classList.add('is-active');
+      if (t.dataset.tab === 'search') {
+        searchWrap.classList.remove('hidden');
+        kicker.textContent = 'Search';
+        titleEl.textContent = '찾기.';
+        searchEl.focus();
+      } else {
+        searchWrap.classList.add('hidden');
+        kicker.textContent = 'Insight gallery';
+        titleEl.textContent = '인사이트가 된 장면들.';
+        if (searchEl.value) { searchEl.value = ''; applySearch(''); }
+      }
+    }));
 
     // ── Lightbox ──
     const lb = document.getElementById('lightbox');
