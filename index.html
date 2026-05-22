@@ -9,16 +9,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Pretendard Variable','Pretendard','system-ui','sans-serif'] },
-          colors: {
-            bg:'#0E0C0A', bg2:'#161310', bg3:'#1E1A16', line:'#2A2420',
-            ink:{0:'#F0EAE0', 1:'#C9BEAE', 2:'#8A7C6B', 3:'#6B5E50'},
-            accent:'#C4753A', gold:'#D4A853'
-          }
+      theme: { extend: {
+        fontFamily: { sans: ['Pretendard Variable','Pretendard','system-ui','sans-serif'] },
+        colors: {
+          bg:'#0E0C0A', bg2:'#161310', bg3:'#1E1A16', line:'#2A2420',
+          ink:{0:'#F0EAE0', 1:'#C9BEAE', 2:'#8A7C6B', 3:'#6B5E50'},
+          accent:'#C4753A', gold:'#D4A853'
         }
-      }
+      } }
     };
   </script>
   <style>
@@ -27,46 +25,49 @@
     .meta { font-variant-numeric: tabular-nums; letter-spacing:.02em; }
     .label { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#8A7C6B; font-weight:500; }
 
-    /* uniform grid */
-    .grid-gallery {
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap:8px;
-    }
+    .grid-gallery { display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:8px; }
     @media (max-width:640px){ .grid-gallery { grid-template-columns: repeat(2, 1fr); } }
-    .cell {
-      position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:8px;
-      background:#161310; border:1px solid #2A2420; cursor:zoom-in;
-      transition: transform .16s ease, border-color .16s ease;
-    }
+    .cell { position:relative; aspect-ratio:1/1; overflow:hidden; border-radius:8px; background:#161310;
+      border:1px solid #2A2420; cursor:zoom-in; transition: transform .16s ease, border-color .16s ease; }
     .cell img { width:100%; height:100%; object-fit:cover; display:block; transition: transform .3s ease; }
     .cell:hover { border-color:#C4753A; transform: translateY(-2px); }
     .cell:hover img { transform: scale(1.05); }
-    .cell .cap {
-      position:absolute; inset:auto 0 0 0; padding:16px 10px 8px;
-      font-size:11px; color:#F0EAE0; opacity:0; transition:opacity .16s ease;
-      background:linear-gradient(to top, rgba(14,12,10,.9), rgba(14,12,10,0));
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
+    .cell .cat-dot { position:absolute; top:8px; left:8px; width:8px; height:8px; border-radius:9999px; box-shadow:0 0 0 2px rgba(0,0,0,.4); }
+    .cell .cap { position:absolute; inset:auto 0 0 0; padding:16px 10px 8px; font-size:11px; color:#F0EAE0;
+      opacity:0; transition:opacity .16s ease; background:linear-gradient(to top, rgba(14,12,10,.9), rgba(14,12,10,0));
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .cell:hover .cap { opacity:1; }
 
-    /* lightbox */
     #lightbox { background:rgba(8,7,6,.94); backdrop-filter: blur(4px); }
-    #lightbox img { max-width:92vw; max-height:82vh; object-fit:contain; border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+    #lightbox img { max-width:92vw; max-height:74vh; object-fit:contain; border-radius:6px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
     .lb-btn { position:fixed; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:9999px;
       background:rgba(30,26,22,.7); border:1px solid #2A2420; color:#F0EAE0; font-size:20px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center; transition:background .15s; }
+      display:flex; align-items:center; justify-content:center; transition:background .15s; z-index:10; }
     .lb-btn:hover { background:#C4753A; }
 
     .skeleton { aspect-ratio:1/1; background:#1E1A16; border-radius:8px; animation:pulse 1.6s ease-in-out infinite; }
     @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
 
-    /* tabs */
     .tab { padding:8px 18px 13px; margin-bottom:-13px; font-size:13px; color:#8A7C6B; cursor:pointer;
-      background:transparent; border:none; border-radius:8px 8px 0 0; transition:color .15s, background .15s, border-color .15s;
+      background:transparent; border:none; border-radius:8px 8px 0 0; transition:color .15s, border-color .15s;
       border-bottom:2px solid transparent; }
     .tab:hover { color:#F0EAE0; }
     .tab.is-active { color:#F0EAE0; border-bottom-color:#C4753A; }
+
+    .chip { display:inline-flex; align-items:center; gap:6px; padding:6px 13px; border-radius:9999px; font-size:12.5px;
+      border:1px solid #2A2420; background:#161310; color:#C9BEAE; cursor:pointer; user-select:none; transition:all .14s; }
+    .chip:hover { border-color:#C4753A; color:#F0EAE0; }
+    .chip.is-active { background:#C4753A; border-color:#C4753A; color:#0E0C0A; font-weight:600; }
+    .chip .dot { width:7px; height:7px; border-radius:9999px; }
+
+    .field { width:100%; background:#0E0C0A; border:1px solid #2A2420; border-radius:8px; padding:10px 12px;
+      color:#F0EAE0; font-size:14px; }
+    .field:focus { outline:none; border-color:#C4753A; }
+    .btn-primary { background:#C4753A; color:#0E0C0A; font-weight:600; border-radius:8px; padding:10px 18px; font-size:14px; cursor:pointer; transition:background .15s; }
+    .btn-primary:hover { background:#D4A853; }
+    .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-ghost { border:1px solid #2A2420; color:#C9BEAE; border-radius:8px; padding:10px 18px; font-size:14px; cursor:pointer; background:transparent; }
+    .btn-ghost:hover { border-color:#C4753A; color:#F0EAE0; }
   </style>
 </head>
 <body class="text-ink-0 font-sans antialiased">
@@ -75,10 +76,13 @@
   <div class="max-w-7xl mx-auto px-6 pt-8">
     <div class="flex items-center justify-between gap-4">
       <span class="text-sm font-semibold tracking-tight">Mutezeze OS</span>
-      <span class="inline-flex items-center gap-2 text-xs meta text-ink-3">
-        <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
-        Live · Day <span data-live-day>1</span>
-      </span>
+      <div class="flex items-center gap-4">
+        <button id="upload-open" class="btn-primary !py-1.5 !px-3.5 !text-xs">+ 업로드</button>
+        <span class="inline-flex items-center gap-2 text-xs meta text-ink-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+          Live · Day <span data-live-day>1</span>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -91,65 +95,90 @@
   </nav>
 
   <!-- Header -->
-  <header class="max-w-7xl mx-auto px-6 pt-12 pb-8">
-    <div class="border-l-4 border-accent pl-4 mb-8">
+  <header class="max-w-7xl mx-auto px-6 pt-12 pb-6">
+    <div class="border-l-4 border-accent pl-4 mb-7">
       <p class="text-sm meta text-accent mb-3" id="kicker">Insight gallery</p>
-      <h1 class="text-3xl md:text-4xl leading-tight font-semibold tracking-tight" id="title">
-        인사이트가 된 장면들.
-      </h1>
+      <h1 class="text-3xl md:text-4xl leading-tight font-semibold tracking-tight" id="title">인사이트가 된 장면들.</h1>
       <p class="mt-4 text-ink-2" id="meta">로딩 중…</p>
     </div>
 
-    <!-- Search bar (shown on Search tab) -->
-    <div id="search-wrap" class="relative max-w-xl hidden">
+    <!-- Search bar (Search tab only) -->
+    <div id="search-wrap" class="relative max-w-xl hidden mb-2">
       <input id="search" type="search" placeholder="제목·태그로 검색…" autocomplete="off"
-        class="w-full bg-bg2 border border-line rounded-full pl-12 pr-4 py-3 text-ink-0 placeholder-ink-3 text-sm
-               focus:outline-none focus:border-accent transition" />
-      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
-      </svg>
+        class="w-full bg-bg2 border border-line rounded-full pl-12 pr-4 py-3 text-ink-0 placeholder-ink-3 text-sm focus:outline-none focus:border-accent transition" />
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     </div>
+
+    <!-- Category filter (Gallery tab) -->
+    <div id="filter-wrap" class="flex flex-wrap gap-2"></div>
   </header>
 
   <!-- Gallery -->
   <main class="max-w-7xl mx-auto px-6 pb-20">
     <div id="loading" class="grid-gallery">
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
-      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
     </div>
-
     <div id="empty" class="hidden text-center py-24">
       <div class="label mb-3 text-accent">No photos</div>
       <p class="text-ink-2" id="empty-msg">아직 사진이 없어요.</p>
     </div>
-
     <div id="grid" class="grid-gallery hidden"></div>
-
     <div id="more-wrap" class="hidden text-center mt-10">
-      <button id="more-btn" class="text-sm meta text-ink-2 border border-line rounded-full px-6 py-2.5 hover:border-accent hover:text-gold transition">
-        더 보기 <span id="more-count"></span>
-      </button>
+      <button id="more-btn" class="btn-ghost rounded-full">더 보기 <span id="more-count"></span></button>
     </div>
   </main>
 
   <footer class="max-w-7xl mx-auto px-6 py-8 border-t border-line">
-    <div class="flex justify-between text-sm meta text-ink-3">
-      <span>Mutezeze OS · Zeze Choi</span>
-      <span>mutezeze.vercel.app</span>
-    </div>
+    <div class="flex justify-between text-sm meta text-ink-3"><span>Mutezeze OS · Zeze Choi</span><span>mutezeze.vercel.app</span></div>
   </footer>
 
   <!-- Lightbox -->
-  <div id="lightbox" class="fixed inset-0 z-50 hidden items-center justify-center p-6">
+  <div id="lightbox" class="fixed inset-0 z-50 hidden flex-col items-center justify-center p-6 gap-4">
     <button id="lb-close" class="lb-btn" style="right:20px;top:20px;transform:none;">✕</button>
     <button id="lb-prev" class="lb-btn" style="left:20px;">‹</button>
     <button id="lb-next" class="lb-btn" style="right:20px;">›</button>
-    <figure class="text-center">
-      <img id="lb-img" src="" alt="" />
-      <figcaption id="lb-cap" class="mt-4 text-sm text-ink-1 meta"></figcaption>
-    </figure>
+    <img id="lb-img" src="" alt="" />
+    <div class="flex items-center gap-4">
+      <figcaption id="lb-cap" class="text-sm text-ink-1 meta"></figcaption>
+      <button id="lb-delete" class="btn-ghost !py-1.5 !px-3.5 !text-xs !text-red-300 !border-red-900/50 hover:!border-red-500 hover:!text-red-400">삭제</button>
+    </div>
+  </div>
+
+  <!-- Upload modal -->
+  <div id="upload-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-6" style="background:rgba(8,7,6,.85);backdrop-filter:blur(4px);">
+    <div class="bg-bg2 border border-line rounded-2xl p-7 w-full max-w-md">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-semibold">사진 업로드</h2>
+        <button id="upload-close" class="text-ink-2 hover:text-ink-0 text-xl">✕</button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="label block mb-2">사진 (여러 장 가능)</label>
+          <input id="up-files" type="file" accept="image/*" multiple class="field" />
+        </div>
+        <div>
+          <label class="label block mb-2">카테고리</label>
+          <select id="up-category" class="field">
+            <option value="기타">기타</option>
+            <option value="책">책</option>
+            <option value="드라마">드라마</option>
+            <option value="영화">영화</option>
+            <option value="강연">강연</option>
+            <option value="브랜드">브랜드</option>
+          </select>
+        </div>
+        <div>
+          <label class="label block mb-2">태그 (쉼표로 구분, 선택)</label>
+          <input id="up-tags" type="text" placeholder="예: 고독, 브랜딩, 영감" class="field" />
+        </div>
+        <div id="up-status" class="text-sm text-ink-2 hidden"></div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button id="up-cancel" class="btn-ghost">취소</button>
+          <button id="up-submit" class="btn-primary">업로드</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ===== Supabase live data ===== -->
@@ -158,157 +187,182 @@
 
     const SUPABASE_URL = '__SUPABASE_URL__';
     const SUPABASE_KEY = '__SUPABASE_ANON_KEY__';
+    const BUCKET = 'captures';
     const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const PAGE = 60;
 
-    let all = [];        // all rows
-    let filtered = [];   // after search
-    let shown = 0;
+    const CAT_COLOR = { '책':'#9C7B57','드라마':'#946683','영화':'#B5454C','강연':'#D6A53D','브랜드':'#3F6F86','기타':'#8A7C6B','미분류':'#6B5E50' };
+    const CAT_ORDER = ['책','드라마','영화','강연','브랜드','기타','미분류'];
 
-    const loadingEl = document.getElementById('loading');
-    const gridEl = document.getElementById('grid');
-    const emptyEl = document.getElementById('empty');
-    const emptyMsg = document.getElementById('empty-msg');
-    const metaEl = document.getElementById('meta');
-    const moreWrap = document.getElementById('more-wrap');
-    const moreBtn = document.getElementById('more-btn');
-    const moreCount = document.getElementById('more-count');
-    const searchEl = document.getElementById('search');
+    let all = [], filtered = [], shown = 0;
+    let activeCat = 'all', query = '';
 
-    function cellHtml(r, idx) {
-      return `
-        <div class="cell" data-idx="${idx}">
-          <img src="${esc(r.image_url)}" loading="lazy" alt="${esc(r.title || '')}" />
-          ${r.title ? `<span class="cap">${esc(r.title)}</span>` : ''}
-        </div>`;
-    }
+    const $ = id => document.getElementById(id);
+    const loadingEl=$('loading'), gridEl=$('grid'), emptyEl=$('empty'), emptyMsg=$('empty-msg'),
+          metaEl=$('meta'), moreWrap=$('more-wrap'), moreBtn=$('more-btn'), moreCount=$('more-count'),
+          searchEl=$('search'), filterWrap=$('filter-wrap');
 
-    function resetGrid() {
-      gridEl.innerHTML = '';
-      shown = 0;
-      renderNext();
-    }
-
-    function renderNext() {
-      const slice = filtered.slice(shown, shown + PAGE);
-      gridEl.insertAdjacentHTML('beforeend', slice.map((r) => cellHtml(r, all.indexOf(r))).join(''));
-      shown += slice.length;
-      const remaining = filtered.length - shown;
-      moreWrap.classList.toggle('hidden', remaining <= 0);
-      if (remaining > 0) moreCount.textContent = `(${remaining})`;
-    }
-
-    function applySearch(q) {
-      q = q.trim().toLowerCase();
-      filtered = !q ? all : all.filter(r => {
-        const hay = `${r.title || ''} ${(r.tags||[]).join(' ')} ${r.category || ''}`.toLowerCase();
-        return hay.includes(q);
+    function applyFilters() {
+      const q = query.trim().toLowerCase();
+      filtered = all.filter(r => {
+        if (activeCat !== 'all' && (r.category || '미분류') !== activeCat) return false;
+        if (q) {
+          const hay = `${r.title||''} ${(r.tags||[]).join(' ')} ${r.category||''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
       });
       gridEl.classList.toggle('hidden', filtered.length === 0);
       emptyEl.classList.toggle('hidden', filtered.length !== 0);
-      if (filtered.length === 0) emptyMsg.textContent = `"${q}" 검색 결과가 없어요.`;
-      metaEl.textContent = q ? `${filtered.length} / ${all.length} photos` : `${all.length} photos · 던지면 쌓이는 시각 아카이브`;
-      resetGrid();
+      if (filtered.length === 0) emptyMsg.textContent = q || activeCat!=='all' ? '조건에 맞는 사진이 없어요.' : '아직 사진이 없어요.';
+      metaEl.textContent = `${filtered.length}${filtered.length!==all.length ? ' / '+all.length : ''} photos`;
+      gridEl.innerHTML=''; shown=0; renderNext();
     }
 
-    let searchTimer;
-    searchEl.addEventListener('input', () => {
-      clearTimeout(searchTimer);
-      searchTimer = setTimeout(() => applySearch(searchEl.value), 180);
-    });
+    function renderNext() {
+      const slice = filtered.slice(shown, shown+PAGE);
+      gridEl.insertAdjacentHTML('beforeend', slice.map(r => {
+        const c = CAT_COLOR[r.category||'미분류'] || '#6B5E50';
+        return `<div class="cell" data-id="${esc(r.id)}">
+          <span class="cat-dot" style="background:${c}"></span>
+          <img src="${esc(r.image_url)}" loading="lazy" alt="${esc(r.title||'')}" />
+          ${r.title ? `<span class="cap">${esc(r.title)}</span>` : ''}
+        </div>`;
+      }).join(''));
+      shown += slice.length;
+      const rem = filtered.length - shown;
+      moreWrap.classList.toggle('hidden', rem<=0);
+      if (rem>0) moreCount.textContent = `(${rem})`;
+    }
     moreBtn.addEventListener('click', renderNext);
 
-    // ── Tabs (Gallery / Search) ──
+    function buildFilters() {
+      const present = new Set(all.map(r => r.category || '미분류'));
+      const cats = CAT_ORDER.filter(c => present.has(c));
+      const counts = {}; all.forEach(r => { const k=r.category||'미분류'; counts[k]=(counts[k]||0)+1; });
+      filterWrap.innerHTML =
+        `<span class="chip is-active" data-cat="all">전체 <span class="meta opacity-70">${all.length}</span></span>` +
+        cats.map(c => `<span class="chip" data-cat="${esc(c)}"><span class="dot" style="background:${CAT_COLOR[c]}"></span>${esc(c)} <span class="meta opacity-70">${counts[c]}</span></span>`).join('');
+      filterWrap.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', () => {
+        filterWrap.querySelectorAll('.chip').forEach(x=>x.classList.remove('is-active'));
+        chip.classList.add('is-active');
+        activeCat = chip.dataset.cat;
+        applyFilters();
+      }));
+    }
+
+    // tabs
     const tabs = document.querySelectorAll('.tab');
-    const searchWrap = document.getElementById('search-wrap');
-    const kicker = document.getElementById('kicker');
-    const titleEl = document.getElementById('title');
+    const searchWrap = $('search-wrap'), kicker=$('kicker'), titleEl=$('title');
     tabs.forEach(t => t.addEventListener('click', () => {
-      tabs.forEach(x => x.classList.remove('is-active'));
-      t.classList.add('is-active');
-      if (t.dataset.tab === 'search') {
-        searchWrap.classList.remove('hidden');
-        kicker.textContent = 'Search';
-        titleEl.textContent = '찾기.';
-        searchEl.focus();
+      tabs.forEach(x=>x.classList.remove('is-active')); t.classList.add('is-active');
+      if (t.dataset.tab==='search') {
+        searchWrap.classList.remove('hidden'); filterWrap.classList.add('hidden');
+        kicker.textContent='Search'; titleEl.textContent='찾기.'; searchEl.focus();
       } else {
-        searchWrap.classList.add('hidden');
-        kicker.textContent = 'Insight gallery';
-        titleEl.textContent = '인사이트가 된 장면들.';
-        if (searchEl.value) { searchEl.value = ''; applySearch(''); }
+        searchWrap.classList.add('hidden'); filterWrap.classList.remove('hidden');
+        kicker.textContent='Insight gallery'; titleEl.textContent='인사이트가 된 장면들.';
+        if (query) { query=''; searchEl.value=''; applyFilters(); }
       }
     }));
+    let st; searchEl.addEventListener('input', () => { clearTimeout(st); st=setTimeout(()=>{ query=searchEl.value; applyFilters(); }, 180); });
 
-    // ── Lightbox ──
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lb-img');
-    const lbCap = document.getElementById('lb-cap');
-    let lbIndex = -1;
+    // lightbox
+    const lb=$('lightbox'), lbImg=$('lb-img'), lbCap=$('lb-cap'), lbDelete=$('lb-delete');
+    let lbId = null;
+    function openLb(id){ const r=all.find(x=>x.id===id); if(!r)return; lbId=id; lbImg.src=r.image_url; lbCap.textContent=r.title||''; lb.classList.remove('hidden'); lb.classList.add('flex'); document.body.style.overflow='hidden'; }
+    function closeLb(){ lb.classList.add('hidden'); lb.classList.remove('flex'); lbImg.src=''; lbId=null; document.body.style.overflow=''; }
+    function stepLb(dir){ const pos=filtered.findIndex(x=>x.id===lbId); const next=filtered[pos+dir]; if(next) openLb(next.id); }
+    gridEl.addEventListener('click', e => { const cell=e.target.closest('.cell'); if(cell) openLb(cell.dataset.id); });
+    $('lb-close').addEventListener('click', closeLb);
+    $('lb-prev').addEventListener('click', e=>{e.stopPropagation();stepLb(-1);});
+    $('lb-next').addEventListener('click', e=>{e.stopPropagation();stepLb(1);});
+    lb.addEventListener('click', e=>{ if(e.target===lb) closeLb(); });
+    document.addEventListener('keydown', e=>{ if(lb.classList.contains('hidden'))return; if(e.key==='Escape')closeLb(); else if(e.key==='ArrowLeft')stepLb(-1); else if(e.key==='ArrowRight')stepLb(1); });
 
-    function openLightbox(idx) {
-      lbIndex = idx;
-      const r = all[idx];
-      if (!r) return;
-      lbImg.src = r.image_url;
-      lbCap.textContent = r.title || '';
-      lb.classList.remove('hidden');
-      lb.classList.add('flex');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeLightbox() {
-      lb.classList.add('hidden');
-      lb.classList.remove('flex');
-      lbImg.src = '';
-      document.body.style.overflow = '';
-    }
-    function step(dir) {
-      // navigate within filtered set
-      const pos = filtered.indexOf(all[lbIndex]);
-      const next = filtered[pos + dir];
-      if (next) openLightbox(all.indexOf(next));
-    }
-
-    gridEl.addEventListener('click', (e) => {
-      const cell = e.target.closest('.cell');
-      if (cell) openLightbox(parseInt(cell.dataset.idx, 10));
-    });
-    document.getElementById('lb-close').addEventListener('click', closeLightbox);
-    document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); step(-1); });
-    document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); step(1); });
-    lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); }); // 바깥 클릭
-    document.addEventListener('keydown', (e) => {
-      if (lb.classList.contains('hidden')) return;
-      if (e.key === 'Escape') closeLightbox();
-      else if (e.key === 'ArrowLeft') step(-1);
-      else if (e.key === 'ArrowRight') step(1);
+    // delete
+    lbDelete.addEventListener('click', async () => {
+      const r = all.find(x=>x.id===lbId); if(!r) return;
+      if (!confirm('이 사진을 삭제할까요? (Storage·DB에서 영구 삭제)')) return;
+      try {
+        const objName = r.image_url.split(`/${BUCKET}/`)[1];
+        if (objName) await sb.storage.from(BUCKET).remove([decodeURIComponent(objName)]);
+        const { error } = await sb.from('contents').delete().eq('id', r.id);
+        if (error) throw error;
+        all = all.filter(x=>x.id!==r.id);
+        closeLb();
+        buildFilters();
+        applyFilters();
+      } catch(e){ alert('삭제 실패: '+e.message); }
     });
 
-    // ── Load ──
+    // upload
+    const upModal=$('upload-modal');
+    function openUp(){ upModal.classList.remove('hidden'); upModal.classList.add('flex'); }
+    function closeUp(){ upModal.classList.add('hidden'); upModal.classList.remove('flex'); $('up-files').value=''; $('up-tags').value=''; $('up-status').classList.add('hidden'); }
+    $('upload-open').addEventListener('click', openUp);
+    $('upload-close').addEventListener('click', closeUp);
+    $('up-cancel').addEventListener('click', closeUp);
+
+    function resizeToBlob(file, maxDim=1600, q=0.82){
+      return new Promise((resolve,reject)=>{
+        const img=new Image();
+        img.onload=()=>{ let {width,height}=img;
+          if(width>=height && width>maxDim){ height=Math.round(height*maxDim/width); width=maxDim; }
+          else if(height>maxDim){ width=Math.round(width*maxDim/height); height=maxDim; }
+          const cv=document.createElement('canvas'); cv.width=width; cv.height=height;
+          cv.getContext('2d').drawImage(img,0,0,width,height);
+          cv.toBlob(b=> b?resolve(b):reject(new Error('canvas')), 'image/jpeg', q);
+        };
+        img.onerror=reject; img.src=URL.createObjectURL(file);
+      });
+    }
+
+    $('up-submit').addEventListener('click', async () => {
+      const files = [...$('up-files').files];
+      if (!files.length) { alert('사진을 선택하세요.'); return; }
+      const category = $('up-category').value;
+      const tags = $('up-tags').value.split(',').map(s=>s.trim()).filter(Boolean);
+      const status=$('up-status'); status.classList.remove('hidden');
+      $('up-submit').disabled=true;
+      let ok=0, fail=0;
+      for (let i=0;i<files.length;i++){
+        status.textContent = `업로드 중… ${i+1}/${files.length}`;
+        try {
+          const blob = await resizeToBlob(files[i]);
+          const name = `web-${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
+          const { error: upErr } = await sb.storage.from(BUCKET).upload(name, blob, { contentType:'image/jpeg', upsert:true });
+          if (upErr) throw upErr;
+          const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${name}`;
+          const { data, error: dbErr } = await sb.from('contents').insert({
+            title: files[i].name.replace(/\.[^.]+$/,''), image_url: publicUrl, category, tags
+          }).select().single();
+          if (dbErr) throw dbErr;
+          all.unshift(data); ok++;
+        } catch(e){ fail++; console.warn('upload fail', e); }
+      }
+      status.textContent = `완료 — 성공 ${ok}${fail?`, 실패 ${fail}`:''}`;
+      buildFilters(); applyFilters();
+      $('up-submit').disabled=false;
+      setTimeout(closeUp, 1200);
+    });
+
+    // load
     (async () => {
       try {
-        const { data, error } = await sb
-          .from('contents')
+        const { data, error } = await sb.from('contents')
           .select('id, title, image_url, tags, category, created_at')
-          .not('image_url', 'is', null)
-          .order('created_at', { ascending: false })
-          .limit(1000);
-
+          .not('image_url','is',null).order('created_at',{ascending:false}).limit(2000);
         loadingEl.classList.add('hidden');
-        if (error) { console.warn('gallery error', error); emptyEl.classList.remove('hidden'); emptyMsg.textContent='불러오기 실패'; metaEl.textContent=''; return; }
-        if (!data || data.length === 0) { emptyEl.classList.remove('hidden'); metaEl.textContent='0 photos'; return; }
-
-        all = data;
-        filtered = data;
+        if (error){ console.warn(error); emptyEl.classList.remove('hidden'); metaEl.textContent='불러오기 실패'; return; }
+        if (!data || !data.length){ emptyEl.classList.remove('hidden'); metaEl.textContent='0 photos'; buildFilters(); return; }
+        all = data; filtered = data;
         metaEl.textContent = `${data.length} photos · 던지면 쌓이는 시각 아카이브`;
         gridEl.classList.remove('hidden');
-        renderNext();
-      } catch (e) {
-        console.warn('gallery failed', e);
-        loadingEl.classList.add('hidden');
-        emptyEl.classList.remove('hidden');
-      }
+        buildFilters(); renderNext();
+      } catch(e){ console.warn(e); loadingEl.classList.add('hidden'); emptyEl.classList.remove('hidden'); }
     })();
   </script>
 
