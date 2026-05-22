@@ -60,6 +60,11 @@
     .chip.is-active { background:#C4753A; border-color:#C4753A; color:#0E0C0A; font-weight:600; }
     .chip .dot { width:7px; height:7px; border-radius:9999px; }
 
+    .sort-btn { padding:5px 12px; border-radius:9999px; font-size:12px; color:#8A7C6B; background:transparent;
+      border:1px solid transparent; cursor:pointer; transition:all .14s; white-space:nowrap; }
+    .sort-btn:hover { color:#F0EAE0; }
+    .sort-btn.is-active { color:#F0EAE0; background:#1E1A16; border-color:#2A2420; }
+
     .field { width:100%; background:#0E0C0A; border:1px solid #2A2420; border-radius:8px; padding:10px 12px;
       color:#F0EAE0; font-size:14px; }
     .field:focus { outline:none; border-color:#C4753A; }
@@ -109,8 +114,14 @@
       <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     </div>
 
-    <!-- Category filter (Gallery tab) -->
-    <div id="filter-wrap" class="flex flex-wrap gap-2"></div>
+    <!-- Gallery controls: category filter + sort toggle -->
+    <div id="gallery-controls" class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+      <div id="filter-wrap" class="flex flex-wrap gap-2"></div>
+      <div id="sort-wrap" class="flex items-center gap-1 ml-auto shrink-0">
+        <button class="sort-btn is-active" data-sort="newest">최신순</button>
+        <button class="sort-btn" data-sort="oldest">오래된순</button>
+      </div>
+    </div>
   </header>
 
   <!-- Gallery -->
@@ -197,7 +208,9 @@
     const CAT_ORDER = ['책','드라마','영화','강연','브랜드','기타','미분류'];
 
     let all = [], filtered = [], shown = 0;
-    let activeCat = 'all', query = '';
+    let activeCat = 'all', query = '', sortDir = 'newest';
+
+    const ts = r => { const t = Date.parse(r.created_at); return Number.isNaN(t) ? 0 : t; };
 
     const $ = id => document.getElementById(id);
     const loadingEl=$('loading'), gridEl=$('grid'), emptyEl=$('empty'), emptyMsg=$('empty-msg'),
@@ -214,6 +227,7 @@
         }
         return true;
       });
+      filtered.sort((a,b) => sortDir === 'newest' ? ts(b) - ts(a) : ts(a) - ts(b));
       gridEl.classList.toggle('hidden', filtered.length === 0);
       emptyEl.classList.toggle('hidden', filtered.length !== 0);
       if (filtered.length === 0) emptyMsg.textContent = q || activeCat!=='all' ? '조건에 맞는 사진이 없어요.' : '아직 사진이 없어요.';
@@ -252,6 +266,14 @@
         applyFilters();
       }));
     }
+
+    // sort toggle (newest / oldest)
+    document.querySelectorAll('.sort-btn').forEach(btn => btn.addEventListener('click', () => {
+      if (btn.dataset.sort === sortDir) return;
+      sortDir = btn.dataset.sort;
+      document.querySelectorAll('.sort-btn').forEach(x => x.classList.toggle('is-active', x === btn));
+      applyFilters();
+    }));
 
     // tabs
     const tabs = document.querySelectorAll('.tab');
