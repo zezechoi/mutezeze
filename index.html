@@ -352,12 +352,22 @@
     // load
     (async () => {
       try {
-        const { data, error } = await sb.from('contents')
-          .select('id, title, image_url, tags, category, created_at')
-          .not('image_url','is',null).order('created_at',{ascending:false}).limit(2000);
+        // PostgREST caps each request at 1000 rows → page through with range()
+        const data = []; let pageFrom = 0;
+        while (true) {
+          const { data: page, error } = await sb.from('contents')
+            .select('id, title, image_url, tags, category, created_at')
+            .not('image_url','is',null)
+            .order('created_at',{ascending:false})
+            .range(pageFrom, pageFrom + 999);
+          if (error) { console.warn(error); break; }
+          if (!page || !page.length) break;
+          data.push(...page);
+          if (page.length < 1000) break;
+          pageFrom += 1000;
+        }
         loadingEl.classList.add('hidden');
-        if (error){ console.warn(error); emptyEl.classList.remove('hidden'); metaEl.textContent='불러오기 실패'; return; }
-        if (!data || !data.length){ emptyEl.classList.remove('hidden'); metaEl.textContent='0 photos'; buildFilters(); return; }
+        if (!data.length){ emptyEl.classList.remove('hidden'); metaEl.textContent='0 photos'; buildFilters(); return; }
         all = data; filtered = data;
         metaEl.textContent = `${data.length} photos · 던지면 쌓이는 시각 아카이브`;
         gridEl.classList.remove('hidden');
